@@ -36,7 +36,9 @@ class MyApp extends StatelessWidget {
   ##StatefulWidget Class creates an instance of a State Class
 */
 class RandomWordsState extends State<RandomWords>{
-  final _suggestions = <WordPair>[];
+  final List<WordPair>_suggestions = <WordPair>[];
+  //Set does not allow duplicate entries 
+  final Set<WordPair> _saved = Set<WordPair>();
   final _biggerFont = const TextStyle(fontSize: 18.0);  
   
   Widget _buildSuggestions() {
@@ -52,11 +54,19 @@ class RandomWordsState extends State<RandomWords>{
         return _buildRow(_suggestions[index]);
       });
   }
+
+  
   Widget _buildRow(WordPair pair){
+    //Makes sure that word pairing  has not already been added to favorites.
+    final bool alreadySaved = _saved.contains(pair);
     return ListTile(
       title: Text(
         pair.asPascalCase,
         style: _biggerFont,
+      ),
+      trailing: Icon(
+        alreadySaved ? Icons.favorite : Icons.favorite_border,
+        color: alreadySaved ? Colors.red : null,
       ),
     );
   }
